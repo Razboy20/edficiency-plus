@@ -1,0 +1,14 @@
+.legend {
+  @apply flex h-16 items-center gap-10 overflow-x-auto px-6 text-xl font-semibold uppercase;
+
+  .label {
+    @apply inline-flex items-center gap-2 text-zinc-600 dark:text-white;
+  }
+  .chips {
+    @apply flex gap-4;
+  }
+}
+
+.chip {
+  @apply whitespace-nowrap rounded-full px-3.5 py-0.5;
+}

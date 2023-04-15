@@ -1,0 +1,40 @@
+.navbar_sizer {
+  @apply h-[3.75em];
+}
+
+.navbar {
+  @apply fixed top-0 w-screen overflow-x-auto bg-white px-4 py-3 shadow dark:bg-gray-800;
+  @apply flex items-center justify-center text-base font-semibold md:text-lg;
+
+  .title {
+    @apply flex-1 justify-self-start;
+  }
+
+  .links {
+    @apply relative flex w-fit gap-2;
+    a {
+      @apply btn-transition inline-flex items-center rounded-md px-2 py-1 text-center text-zinc-500 outline-none dark:text-zinc-400;
+      @apply hover:bg-zinc-100/70 hover:text-gray-900 focus-visible:bg-zinc-100/80 focus-visible:text-gray-900 dark:hover:bg-zinc-100/10 dark:hover:text-white;
+      @apply relative after:absolute hover:after:opacity-30;
+      @apply active:scale-95;
+
+      &::after {
+        @apply bottom-0 left-0 right-0 h-1 rounded-full bg-zinc-500 opacity-0 transition duration-150;
+      }
+
+      &.active {
+        @apply text-zinc-900 after:opacity-0 dark:text-zinc-50;
+      }
+    }
+    &.loading {
+      a.active::after {
+        @apply bg-blue-400 opacity-100 transition-none;
+      }
+    }
+  }
+
+  .logout_button {
+    @apply btn rounded-lg border-2 border-zinc-400 font-bold text-zinc-500;
+    @apply hover:border-zinc-500 hover:bg-zinc-100 hover:text-gray-900 hover:shadow-sm active:shadow-none;
+  }
+}

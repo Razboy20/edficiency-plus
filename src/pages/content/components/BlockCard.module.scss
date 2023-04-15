@@ -1,0 +1,35 @@
+.block_card {
+  @apply min-h-[14rem] w-full rounded-xl border-2 border-zinc-300 bg-zinc-200 px-4 py-4 shadow;
+
+  .top {
+    @apply mb-1;
+    .title {
+      @apply text-xl font-semibold text-zinc-900;
+    }
+
+    .subtitle {
+      @apply -mt-0.5 text-sm text-zinc-700;
+    }
+  }
+
+  .description {
+    @apply text-base text-zinc-900;
+  }
+
+  &.color__ {
+    &mandatory {
+      @apply border-red-300 bg-red-200;
+    }
+
+    &cte-priority {
+      @apply border-purple-300 bg-purple-200;
+    }
+
+    &pep-rally {
+      @apply border-teal-300 bg-teal-200;
+    }
+    &waitlist {
+      @apply border-yellow-300 bg-yellow-200;
+    }
+  }
+}

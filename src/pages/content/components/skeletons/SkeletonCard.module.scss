@@ -1,0 +1,42 @@
+.block_card {
+  @apply min-h-[14rem] w-full rounded-xl border-2 border-zinc-300/50 bg-zinc-200/70 px-4 py-4 shadow;
+  @apply animate-pulse;
+
+  .top {
+    @apply mb-1;
+    .title {
+      @apply invisible relative rounded-full text-xl font-semibold;
+
+      &::after {
+        @apply visible absolute left-0 top-1/2 h-4 w-3/4 -translate-y-1/2 rounded-full bg-zinc-500/50;
+        content: "";
+      }
+    }
+
+    .subtitle {
+      @apply invisible relative -mt-0.5 rounded-full text-sm;
+
+      &::before {
+        @apply visible absolute left-0 top-1/2 h-2.5 w-1/4 -translate-y-1/2 rounded-full bg-zinc-400/50;
+        content: "";
+      }
+      &::after {
+        @apply visible absolute left-[calc(25%+0.5em)] top-1/2 h-2.5 w-1/3 -translate-y-1/2 rounded-full bg-zinc-400/50;
+        content: "";
+      }
+    }
+  }
+
+  .description {
+    @apply invisible relative mb-6 rounded-full text-base;
+
+    &::before {
+      @apply visible absolute left-0 top-1/2 h-3 w-full -translate-y-1/2 rounded-full bg-zinc-400/50;
+      content: "";
+    }
+    &::after {
+      @apply visible absolute left-0 top-full h-3 w-[45%] translate-y-1/2 rounded-full bg-zinc-400/50;
+      content: "";
+    }
+  }
+}
