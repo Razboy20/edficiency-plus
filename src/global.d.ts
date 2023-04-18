@@ -22,5 +22,34 @@ declare module "*.json" {
 declare global {
   interface Window {
     loggedIn: boolean;
+    siteData: {
+      urlroot: string;
+      page: string;
+      ajax: string;
+      sitename: string;
+      loggedin: string;
+      multipleperiods: string;
+      defaultsessionname: string;
+      periodkeys: string;
+      periodnames: string;
+      isedficiency: string;
+      isadmin: string;
+      isteacher: string;
+      isstudent: string;
+      userid: string;
+      tcrfeo: string;
+      schoolcellenabled: string;
+      usercellenabled: string;
+      getsessionid: string;
+      getperiodid: string;
+      canaddsessions: string;
+      caneditsessions: string;
+      candeletesessions: string;
+      blendedenabled: string;
+      membergroups: string;
+      urlparams: string;
+      maxhotspots: string;
+      upcominghotspots: string;
+    };
   }
 }

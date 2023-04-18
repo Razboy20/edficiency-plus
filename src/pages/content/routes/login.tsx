@@ -1,16 +1,15 @@
 import { createSignal, Show } from "solid-js";
-import { createRouteData, useRouteData } from "solid-start";
-import { redirect } from "solid-start/server";
+import { useNavigate } from "solid-start";
 import Spinner from "../components/Spinner";
 
-export const routeData = () => {
-  return createRouteData((_, { request }) => {
-    // const user = await authenticator.isAuthenticated(request);
-    const user = {};
-    if (user) return redirect("/");
-    return user;
-  });
-};
+// export const routeData = () => {
+//   return createRouteData((_, { request }) => {
+//     // const user = await authenticator.isAuthenticated(request);
+//     const user = {};
+//     if (user) return redirect("/");
+//     return user;
+//   });
+// };
 
 const GoogleLogo = () => (
   <svg
@@ -41,8 +40,18 @@ const GoogleLogo = () => (
 );
 
 export default function Home() {
-  const _data = useRouteData<typeof routeData>();
-  _data.latest;
+  // const _data = useRouteData<typeof routeData>();
+  // _data.latest;
+
+  if (window.loggedIn) {
+    const navigate = useNavigate();
+    navigate("/", {
+      replace: true,
+    });
+
+    // eslint-disable-next-line solid/components-return-once
+    return;
+  }
 
   const [loading, setLoading] = createSignal(false);
 
@@ -56,6 +65,8 @@ export default function Home() {
           console.log("logging in...");
           setLoading(true);
           try {
+            location.href =
+              "https://accounts.google.com/o/oauth2/auth?response_type=code&access_type=online&client_id=469334674292-gub9dp73tt9rm3dpvmvepklu8hop8uhf.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Flb01.edf.school%2Fpublic%2FloginWithGoogle.php&state=%257B%2522siteid%2522%253A%2522westwood%2522%257D&scope=email%20profile&approval_prompt=auto";
             // const test = (await authClient.login("google", {
             //   successRedirect: `${location?.origin}/`,
             //   failureRedirect: `${location?.origin}/`,

@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { Transition } from "solid-headless";
 import type { VoidProps } from "solid-js";
 import { createEffect, createSignal, lazy, Show, Suspense } from "solid-js";
 import { sameDay } from "../utils/date";
@@ -67,28 +66,28 @@ export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
           </button>
         </Show>
         <Suspense>
-          <Transition show={modalOpen()}>
-            <JoinModal
-              open={modalOpen()}
-              date={props.date}
-              activeBlock={props.selectedBlock}
-              onClose={() => setModalOpen(false)}
-              // eslint-disable-next-line solid/reactivity
-              selectBlock={async (_block) => {
-                // await joinMutation(
-                //   {
-                //     id: block.id,
-                //   },
-                //   {
-                //     additionalTypenames: ["Block"],
-                //   }
-                // );
-                // // eslint-disable-next-line no-debugger
-                // // debugger;
-                // await refetchRouteData("gql_me");
-              }}
-            ></JoinModal>
-          </Transition>
+          {/* <Transition show={modalOpen()}> */}
+          <JoinModal
+            open={modalOpen()}
+            date={props.date}
+            activeBlock={props.selectedBlock}
+            onClose={() => setModalOpen(false)}
+            // eslint-disable-next-line solid/reactivity
+            selectBlock={async (_block) => {
+              // await joinMutation(
+              //   {
+              //     id: block.id,
+              //   },
+              //   {
+              //     additionalTypenames: ["Block"],
+              //   }
+              // );
+              // // eslint-disable-next-line no-debugger
+              // // debugger;
+              // await refetchRouteData("gql_me");
+            }}
+          ></JoinModal>
+          {/* </Transition> */}
         </Suspense>
       </Suspense>
     </div>

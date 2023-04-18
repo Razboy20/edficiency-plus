@@ -1,6 +1,7 @@
+import { createResizeObserver } from "@solid-primitives/resize-observer";
 import { createEffect, createMemo, createSignal } from "solid-js";
 import { isServer } from "solid-js/web";
-import { A, useLocation } from "solid-start";
+import { A, useLocation, useNavigate } from "solid-start";
 import styles from "./Navbar.module.scss";
 
 export default function Navbar() {
@@ -47,6 +48,10 @@ export default function Navbar() {
     // eslint-disable-next-line solid/reactivity
     void document.fonts.ready.then(updateIndicator);
 
+  createResizeObserver(linkContainer, updateIndicator);
+
+  const navigate = useNavigate();
+
   return (
     <div class={styles.navbar_sizer}>
       <div class={styles.navbar}>
@@ -78,7 +83,20 @@ export default function Navbar() {
         <div class="flex flex-1 justify-end">
           <button
             class={styles.logout_button}
-            onClick={async () => {
+            onClick={() => {
+              fetch("/logout.php", {
+                method: "POST",
+              }).finally(() => {
+                fetch("/index.php", {
+                  method: "POST",
+                }).catch(() => {
+                  // ignore
+                });
+                window.loggedIn = false;
+                navigate("/login", {
+                  replace: true,
+                });
+              });
               // await authClient.logout({ redirectTo: "/login" });
             }}
           >

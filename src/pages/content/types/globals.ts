@@ -10,7 +10,6 @@
 export type BlockColor = BlockType | (undefined | "default");
 
 export interface Block {
-  __typename?: "Block";
   currentStudents: number;
   date: Date;
   description: string;
@@ -19,12 +18,8 @@ export interface Block {
   maxStudents: number;
   name: string;
   teacher: {
-    email: string;
-    id: string;
+    email?: string;
     name: string;
-    __typename?: "Teacher";
-    block?: Block;
-    blocks: Array<Block>;
   };
   type: BlockType;
   waitlisted?: boolean;
@@ -35,4 +30,32 @@ export enum BlockType {
   Mandatory = "MANDATORY",
   Normal = "NORMAL",
   PepRally = "PEP_RALLY",
+}
+
+export interface Profile {
+  name: string;
+  cellconfirmed: string;
+  email: string;
+  school_id: string;
+  cellnumber: null;
+  carrier: null;
+  carrierid: null;
+  txtonconfirm: string;
+  lastname: string;
+  firstname: string;
+  administrator: string;
+  teacher: string;
+  student: string;
+  active: string;
+  frontrow: string;
+  locationid: null;
+  id: string;
+  canRequest: string;
+  canText: string;
+  defaultPeriod: string;
+  autoroster: string;
+  emailnotificationoption: string;
+  daysSinceSync: string;
+  virtuallink: null;
+  maxhotspots: string;
 }

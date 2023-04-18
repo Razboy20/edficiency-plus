@@ -1,5 +1,6 @@
 import { Suspense } from "solid-js";
-import { Outlet, parseCookie, redirect, useRouteData } from "solid-start";
+import { Outlet, useNavigate, useRouteData } from "solid-start";
+import { AuthProvider } from "../components/AuthProvider";
 import Navbar from "../components/Navbar";
 import { FastSpinner } from "../components/Spinner";
 
@@ -21,14 +22,26 @@ import { FastSpinner } from "../components/Spinner";
 
 export function routeData() {
   // check if phpsessionid is set in cookie
-  const sessionId = parseCookie(document.cookie)["PHPSESSID"];
-  if (!sessionId) {
-    throw redirect("/login");
-  }
+  // if (!window.loggedIn) {
+  //   const navigate = useNavigate();
+  //   navigate("/login", {
+  //     replace: true,
+  //   });
+  // }
 }
 
 export default function AuthHandler() {
   useRouteData<typeof routeData>();
+
+  if (!window.loggedIn) {
+    const navigate = useNavigate();
+    navigate("/login", {
+      replace: true,
+    });
+
+    // eslint-disable-next-line solid/components-return-once
+    return;
+  }
 
   return (
     // <UrqlProvider>
@@ -46,7 +59,9 @@ export default function AuthHandler() {
             </div>
           }
         >
-          <Outlet />
+          <AuthProvider>
+            <Outlet />
+          </AuthProvider>
         </Suspense>
       </div>
     </div>

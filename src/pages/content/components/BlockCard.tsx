@@ -20,8 +20,7 @@ const colorMap: Record<BlockType, string> = {
 export default function BlockCard(props: BlockCardProps) {
   const block = createMemo(() => props.block);
 
-  const colorClass = () =>
-    block().waitlisted ? styles.color__waitlist : colorMap[block().type];
+  const colorClass = () => (block().waitlisted ? styles.color__waitlist : colorMap[block().type]);
 
   return (
     <div class={clsx(styles.block_card, colorClass(), props.class)}>

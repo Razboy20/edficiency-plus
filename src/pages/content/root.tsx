@@ -25,7 +25,6 @@ export default function Root() {
       </Head>
       <Body>
         <ErrorBoundary>
-          {/* <AuthProvider> */}
           {/* Wait for https://github.com/lxsmnsyc/solid-styled/pull/11 to be published */}
           {/* <StyleRegistry styles={styles}>
                 <Style>{renderSheets(styles)}</Style> */}
@@ -41,7 +40,6 @@ export default function Root() {
             </Routes>
           </Suspense>
           {/* </StyleRegistry> */}
-          {/* </AuthProvider> */}
         </ErrorBoundary>
         <Scripts />
       </Body>
