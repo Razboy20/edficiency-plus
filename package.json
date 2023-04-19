@@ -16,6 +16,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@leeoniya/ufuzzy": "^1.0.6",
     "@solid-primitives/resize-observer": "^2.0.15",
     "@solidjs/meta": "^0.28.4",
     "@solidjs/router": "^0.8.2",

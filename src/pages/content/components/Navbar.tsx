@@ -1,5 +1,5 @@
 import { createResizeObserver } from "@solid-primitives/resize-observer";
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { createEffect, createMemo, createSignal, on, onMount } from "solid-js";
 import { isServer } from "solid-js/web";
 import { A, useLocation, useNavigate } from "solid-start";
 import styles from "./Navbar.module.scss";
@@ -32,7 +32,7 @@ export default function Navbar() {
     return getPathIndex();
   });
 
-  const updateIndicator = () => {
+  const updateIndicator = (transition = true) => {
     const el = indicatorEl();
     if (!el) throw new Error();
 
@@ -40,15 +40,35 @@ export default function Navbar() {
     el.style.right = `${
       linkContainer()!.clientWidth - (buttons[getPathIndex()]?.offsetLeft + buttons[getPathIndex()]?.offsetWidth)
     }px`;
+
+    if (!transition) el.style.transition = "none";
   };
 
-  createEffect(updateIndicator);
-
-  if (!isServer && document.fonts)
+  // Compute style on first run, after DOM is ready.
+  onMount(() => {
     // eslint-disable-next-line solid/reactivity
-    void document.fonts.ready.then(updateIndicator);
+    queueMicrotask(() => {
+      updateIndicator(false);
+    });
+  });
 
-  createResizeObserver(linkContainer, updateIndicator);
+  // Compute style normally for subsequent runs.
+  createEffect(
+    on(
+      [getPathIndex],
+      () => {
+        updateIndicator();
+      },
+      { defer: true }
+    )
+  );
+
+  createResizeObserver(linkContainer, () => {
+    updateIndicator(false);
+  });
+  // if (!isServer && document.fonts)
+  //   // eslint-disable-next-line solid/reactivity
+  //   void document.fonts.ready.then(updateIndicator);
 
   const navigate = useNavigate();
 

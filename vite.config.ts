@@ -42,37 +42,5 @@ export default defineConfig({
   build: {
     outDir,
     sourcemap: isDev,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // "solid-start": ["solid-start"],
-          // solid: ["solid-js", "solid-start"],
-          // spinner: ["src/pages/content/components/Spinner.tsx"],
-        },
-        // manualChunks: undefined,
-      },
-      // input: {
-      //   devtools: resolve(pagesDir, "devtools", "index.html"),
-      //   panel: resolve(pagesDir, "panel", "index.html"),
-      //   content: resolve(pagesDir, "content", "index.ts"),
-      //   background: resolve(pagesDir, "background", "index.ts"),
-      //   contentStyle: resolve(pagesDir, "content", "style.scss"),
-      //   popup: resolve(pagesDir, "popup", "index.html"),
-      //   newtab: resolve(pagesDir, "newtab", "index.html"),
-      //   options: resolve(pagesDir, "options", "index.html"),
-      // },
-      // output: {
-      //   entryFileNames: "src/pages/[name]/index.js",
-      //   chunkFileNames: isDev
-      //     ? "assets/js/[name].js"
-      //     : "assets/js/[name].[hash].js",
-      //   assetFileNames: (assetInfo) => {
-      //     const { dir, name: _name } = path.parse(assetInfo.name);
-      //     // const assetFolder = getLastElement(dir.split("/"));
-      //     // const name = assetFolder + firstUpperCase(_name);
-      //     return `assets/[ext]/${name}.chunk.[ext]`;
-      //   },
-      // },
-    },
   },
 });

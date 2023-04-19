@@ -10,7 +10,7 @@ export function parseSession(session: UpcomingSession | Session): Block {
   if (isUpcomingSession(session)) {
     return {
       date: new Date(session.date),
-      currentStudents: parseInt(session.iseats) - parseInt(session.openseats),
+      openSeats: parseInt(session.openseats),
       maxStudents: parseInt(session.iseats),
       id: session.id,
       name: session.name,
@@ -20,11 +20,12 @@ export function parseSession(session: UpcomingSession | Session): Block {
       teacher: {
         name: session.tname,
       },
+      waitlisted: parseInt(session.openseats) <= 0,
     };
   } else {
     return {
       date: new Date(session.date),
-      currentStudents: parseInt(session.seats) - parseInt(session.openseats),
+      openSeats: parseInt(session.openseats),
       maxStudents: parseInt(session.seats),
       id: session.id,
       name: session.name,
@@ -34,6 +35,7 @@ export function parseSession(session: UpcomingSession | Session): Block {
       teacher: {
         name: `${session.lastname}, ${session.firstname}`,
       },
+      waitlisted: parseInt(session.openseats) <= 0,
     };
   }
 }

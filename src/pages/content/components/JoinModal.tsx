@@ -1,6 +1,16 @@
+import uFuzzy from "@leeoniya/ufuzzy";
 import { Dialog, DialogOverlay, DialogPanel, DialogTitle, Transition, TransitionChild } from "solid-headless";
 import type { VoidProps } from "solid-js";
-import { For, Suspense, createEffect, createResource, createSelector, createSignal } from "solid-js";
+import {
+  For,
+  Suspense,
+  createEffect,
+  createMemo,
+  createResource,
+  createSelector,
+  createSignal,
+  untrack,
+} from "solid-js";
 import { Portal } from "solid-js/web";
 import type { Block } from "../types/globals";
 import { fetchSessionsForDate } from "../utils/api";
@@ -20,13 +30,17 @@ interface JoinModalProps {
 export default function JoinModal(props: VoidProps<JoinModalProps>) {
   const [isOpen, setIsOpen] = createSignal(false);
   const [selectedBlock, setSelectedBlock] = createSignal<Block>();
+  const [search, setSearch] = createSignal("");
 
   const isSelected = createSelector(selectedBlock, (id: string, source?: Block) => source?.id == id);
 
   const [blocks] = createResource(
     isOpen,
     // eslint-disable-next-line solid/reactivity
-    () => fetchSessionsForDate(props.date)
+    () => fetchSessionsForDate(props.date),
+    {
+      initialValue: undefined,
+    }
   );
 
   createEffect(() => {
@@ -38,8 +52,62 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
     return isOpen();
   });
 
+  // search functionality
+  const fuzzy = new uFuzzy();
+
+  function SearchResults() {
+    const searchableBlocks = createMemo(() => {
+      // trigger suspense boundary on only the first render
+      const sessions = blocks.latest?.sessions ?? blocks()?.sessions;
+
+      if (!sessions) return;
+
+      return sessions.map(
+        (block) => `${block.name}¦${block.detail}¦${block.lastname}, ${block.firstname}¦${block.location}`
+      );
+    });
+
+    const result = createMemo(() => {
+      if (!searchableBlocks()) return undefined;
+
+      const searchValue = search();
+
+      if (searchValue.length == 0) return blocks.latest.sessions;
+      return fuzzy.filter(searchableBlocks(), searchValue)?.map((i) => untrack(() => blocks.latest.sessions[i]));
+    });
+
+    return (
+      <For
+        each={result()?.map((e) => parseSession(e))}
+        fallback={
+          <div class="text-md mx-3 my-11 text-center text-gray-600">
+            Oops! Looks like there aren't any blocks available to flex into for today.
+          </div>
+        }
+      >
+        {(block) => (
+          <div
+            class="min-w-[20rem] cursor-pointer rounded-xl opacity-70 outline-4 ring-0 ring-blue-500/50 transition duration-150 focus:outline-blue-400"
+            tabIndex={0}
+            classList={{
+              "!opacity-100 ring-4": isSelected(block.id),
+            }}
+            onClick={[setSelectedBlock, block]}
+            onKeyPress={(e) => {
+              if (e.key == "Enter") {
+                setSelectedBlock(block);
+              }
+            }}
+          >
+            <BlockCard block={block} class="!min-h-0" showTotal></BlockCard>
+          </div>
+        )}
+      </For>
+    );
+  }
+
   return (
-    <Transition show={props.open}>
+    <Transition show={props.open} class="hidden">
       <Portal>
         <Dialog isOpen onClose={props.onClose} class="relative z-50">
           <TransitionChild
@@ -72,28 +140,16 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">Choose a block in the list to flex into.</p>
                   </div>
-                  <div class="mt-4 flex max-w-md flex-auto flex-col gap-3 overflow-y-auto rounded-xl p-4">
+                  <input
+                    class="my-4 h-10 w-full flex-shrink-0 rounded-lg border border-gray-300 px-4 outline-none ring-blue-500/50 transition hover:border-gray-400 focus-visible:border-blue-500 focus-visible:ring-4"
+                    value={search()}
+                    onInput={(e) => setSearch(e.currentTarget.value)}
+                    placeholder="Search blocks..."
+                    type="text"
+                  />
+                  <div class="mx-2 flex w-[clamp(1px,24rem,24rem)] flex-auto flex-col gap-3 overflow-y-auto rounded-xl p-1 py-1.5">
                     <Suspense fallback={<SkeletonCard class="!min-h-0 min-w-[20rem]" />}>
-                      <For
-                        each={blocks?.latest?.sessions ?? blocks()?.sessions}
-                        fallback={
-                          <div class="text-md mx-3 my-10 text-center text-gray-600">
-                            Oops! Looks like there aren't any blocks available to flex into for today.
-                          </div>
-                        }
-                      >
-                        {(block) => (
-                          <div
-                            class="min-w-[20rem] cursor-pointer rounded-xl opacity-70 ring-0 ring-blue-500/50 transition duration-150"
-                            classList={{
-                              "!opacity-100 ring-4": isSelected(block.id),
-                            }}
-                            onClick={[setSelectedBlock, block]}
-                          >
-                            <BlockCard block={parseSession(block)} class="!min-h-0"></BlockCard>
-                          </div>
-                        )}
-                      </For>
+                      <SearchResults />
                     </Suspense>
                   </div>
 

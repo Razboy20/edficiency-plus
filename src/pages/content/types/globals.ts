@@ -10,7 +10,7 @@
 export type BlockColor = BlockType | (undefined | "default");
 
 export interface Block {
-  currentStudents: number;
+  openSeats: number;
   date: Date;
   description: string;
   id: string;

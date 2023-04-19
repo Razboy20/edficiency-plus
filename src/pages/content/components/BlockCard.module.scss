@@ -1,5 +1,11 @@
 .block_card {
-  @apply min-h-[14rem] w-full rounded-xl border-2 border-zinc-300 bg-zinc-200 px-4 py-4 shadow;
+  @apply relative min-h-[14rem] w-full overflow-hidden rounded-xl border-2 px-4 py-4 shadow focus-visible:outline-blue-400;
+
+  --_border-color: theme(colors.zinc.300);
+  --_bg-color: theme(colors.zinc.200);
+
+  background: var(--_bg-color);
+  border-color: var(--_border-color);
 
   .top {
     @apply mb-1;
@@ -16,20 +22,29 @@
     @apply text-base text-zinc-900;
   }
 
+  .count {
+    @apply absolute bottom-0 right-0 -mb-0.5 -mr-0.5 inline-block rounded-tl-xl px-3 py-1 text-sm font-semibold;
+    background: var(--_border-color);
+  }
+
   &.color__ {
     &mandatory {
-      @apply border-red-300 bg-red-200;
+      --_border-color: theme(colors.red.300);
+      --_bg-color: theme(colors.red.200);
     }
 
     &cte-priority {
-      @apply border-purple-300 bg-purple-200;
+      --_border-color: theme(colors.purple.300);
+      --_bg-color: theme(colors.purple.200);
     }
 
     &pep-rally {
-      @apply border-teal-300 bg-teal-200;
+      --_border-color: theme(colors.teal.300);
+      --_bg-color: theme(colors.teal.200);
     }
     &waitlist {
-      @apply border-yellow-300 bg-yellow-200;
+      --_border-color: theme(colors.yellow.300);
+      --_bg-color: theme(colors.yellow.200);
     }
   }
 }

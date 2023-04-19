@@ -6,6 +6,9 @@ patchedDependencies:
     path: patches/@crxjs__vite-plugin@2.0.0-beta.7.patch
 
 dependencies:
+  '@leeoniya/ufuzzy':
+    specifier: ^1.0.6
+    version: 1.0.6
   '@solid-primitives/resize-observer':
     specifier: ^2.0.15
     version: 2.0.15(solid-js@1.7.3)
@@ -1682,6 +1685,10 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
+
+  /@leeoniya/ufuzzy@1.0.6:
+    resolution: {integrity: sha512-7co2giTKNKESSEqW+nijF2cGG92WtlGkxFFq7dnwQTemS209JzTLODsnF1pS4KMr3S9xa7WheeCKfGVo5U7s6g==}
+    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}

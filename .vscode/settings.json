@@ -13,4 +13,5 @@
   "typescript.preferences.quoteStyle": "double",
   "prettier.singleQuote": false,
   "debug.internalConsoleOptions": "neverOpen",
+  "scss.lint.unknownAtRules": "ignore",
 }
