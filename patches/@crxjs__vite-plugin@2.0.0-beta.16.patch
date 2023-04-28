@@ -1,0 +1,27 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 1f11001f473fad444791f575853531d8f7190c39..f79c0d45cf35df9cdc83aaa85d03dec45d5a75d5 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -1694,7 +1694,7 @@ function compileFileResources(fileName, {
+   assets: /* @__PURE__ */ new Set(),
+   css: /* @__PURE__ */ new Set(),
+   imports: /* @__PURE__ */ new Set()
+-}) {
++}, visited = /* @__PURE__ */ new Set()) {
+   const chunk = chunks.get(fileName);
+   if (chunk) {
+     const { modules, facadeModuleId, imports, dynamicImports } = chunk;
+@@ -1702,8 +1702,11 @@ function compileFileResources(fileName, {
+       resources.imports.add(x);
+     for (const x of dynamicImports)
+       resources.imports.add(x);
+-    for (const x of [...imports, ...dynamicImports])
+-      compileFileResources(x, { chunks, files, config }, resources);
++    for (const x of [...imports, ...dynamicImports]) {
++      if (visited.has(x)) continue;
++      visited.add(x);
++      compileFileResources(x, { chunks, files, config }, resources, visited);
++    }
+     for (const m of Object.keys(modules))
+       if (m !== facadeModuleId) {
+         const key = prefix$1("/", relative(config.root, m.split("?")[0]));

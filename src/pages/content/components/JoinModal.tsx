@@ -96,7 +96,7 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
         >
           {(block) => (
             <div
-              class="btn-transition min-w-[20rem] cursor-pointer rounded-xl opacity-70 outline-4 ring-0 ring-blue-500/50 duration-150 hover:opacity-100 focus:outline-blue-400 active:scale-[0.97]"
+              class="btn-transition min-w-[20rem] cursor-pointer rounded-xl opacity-70 outline-4 ring-0 ring-blue-500/50 duration-150 active:scale-[0.97] hover:opacity-100 focus:outline-blue-400"
               tabIndex={0}
               classList={{
                 "!opacity-100 ring-4": isSelected(block.id),
@@ -133,7 +133,7 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
           </TransitionChild>
 
           <div class="pointer-events-none fixed inset-0 overflow-y-auto">
-            <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <div class="min-h-full flex items-center justify-center p-4 text-center">
               <TransitionChild
                 as="div"
                 enter="ease-[cubic-bezier(.15,.3,.2,1)] duration-[400ms]"
@@ -143,7 +143,7 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <DialogPanel class="pointer-events-auto flex max-h-[80vh] w-full max-w-xl transform flex-col overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <DialogPanel class="pointer-events-auto max-h-[80vh] max-w-xl w-full flex flex-col transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <DialogTitle as="h3" class="text-lg font-semibold leading-6 text-gray-900">
                     Join Block
                   </DialogTitle>
@@ -151,28 +151,28 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
                     <p class="text-sm text-gray-500">Choose a block in the list to flex into.</p>
                   </div>
                   <input
-                    class="my-4 h-10 w-full flex-shrink-0 rounded-lg border border-gray-300 px-4 outline-none ring-blue-500/50 transition hover:border-gray-400 focus-visible:border-blue-500"
+                    class="my-4 h-10 w-full flex-shrink-0 border border-gray-300 rounded-lg px-4 outline-none ring-blue-500/50 transition focus-visible:border-blue-500 hover:border-gray-400"
                     value={search()}
                     onInput={(e) => setSearch(e.currentTarget.value)}
                     placeholder="Search blocks..."
                     type="text"
                   />
                   <div
-                    class="z-1 pointer-events-none -mt-10 h-10 w-full flex-shrink-0 shadow"
+                    class="pointer-events-none z-1 h-10 w-full flex-shrink-0 shadow -mt-10"
                     style={{
                       "--tw-shadow": "0 14px 14px -14px rgb(0 0 0 / 0.3)",
                       opacity: scroll.y > 1 ? `${Math.max(0, Math.min(scroll.y * 4, 100))}%` : "0",
                     }}
                   ></div>
                   <div
-                    class="relative mx-2 flex w-[clamp(1px,24rem,24rem)] flex-auto translate-x-0 flex-col gap-3 overflow-y-auto rounded-xl p-1 py-1.5"
+                    class="relative mx-2 w-[clamp(1px,24rem,24rem)] flex flex-auto flex-col translate-x-0 gap-3 overflow-y-auto rounded-xl p-1 py-1.5"
                     ref={setScrollContainer}
                   >
                     <Suspense
                       fallback={
                         <>
-                          <SkeletonCard class="!min-h-0 min-w-[20rem]" />
-                          <SkeletonCard class="!min-h-0 min-w-[20rem]" />
+                          <SkeletonCard class="min-w-[20rem] !min-h-0" />
+                          <SkeletonCard class="min-w-[20rem] !min-h-0" />
                         </>
                       }
                     >

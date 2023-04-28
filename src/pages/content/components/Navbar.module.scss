@@ -15,7 +15,7 @@
     a {
       @apply btn-transition inline-flex items-center rounded-md px-2 py-1 text-center text-zinc-500 outline-none dark:text-zinc-400;
       @apply hover:bg-zinc-100/70 hover:text-gray-900 focus-visible:bg-zinc-100/80 focus-visible:text-gray-900 dark:hover:bg-zinc-100/10 dark:hover:text-white;
-      @apply relative after:absolute hover:after:opacity-30;
+      @apply relative after:absolute after:content-empty hover:after:opacity-30;
       @apply active:scale-95;
 
       &::after {

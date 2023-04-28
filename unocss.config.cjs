@@ -18,10 +18,10 @@ export default defineConfig({
       active:scale-[0.96] disabled:active:scale-100
       `,
     focusable: "outline-none ring-blue-500/50 ring-offset-2 focus-visible:ring-4",
-    link: "relative text-cyan-500 transition-all after:pointer-events-none after:absolute after:inset-x-0.5 after:bottom-0 after:h-px after:translate-y-0.5 after:rounded-full after:bg-current after:opacity-0 after:transition-all after:duration-100 after:ease-in-out-expo hover:after:inset-x-0 hover:after:translate-y-0 hover:after:opacity-100",
+    link: "relative text-cyan-500 transition-all after:(content-empty pointer-events-none absolute inset-x-0.5 bottom-0 h-px translate-y-0.5 rounded-full bg-current opacity-0 transition-all duration-100 ease-in-out-expo) hover:after:inset-x-0 hover:after:translate-y-0 hover:after:opacity-100",
   },
   theme: {
-    transitionTimingFunction: {
+    easing: {
       "in-out-expo": "cubic-bezier(.46, 0, .21, 1)",
       "out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
     },
