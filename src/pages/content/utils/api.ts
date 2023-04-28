@@ -7,34 +7,34 @@ function createURLParams(params: Record<string, any>) {
 }
 
 export async function fetchProfileData(): Promise<Profile> {
-  const req = await fetch("https://westwood.edf.school/public/ajax/getProfileInfo.php", { method: "POST" });
+  const req = await fetch("/public/ajax/getProfileInfo.php", { method: "POST" });
   if (!req.ok) throw new Error("Failed to get profile data");
   const data = (await req.json()) as { result: Profile[] };
   return data.result[0];
 }
 
-export async function fetchBlockData(): Promise<BlockData> {
-  const req = await fetch("public/ajax/getAvailableSessions.php", { method: "POST" });
+export async function fetchBlockData(): Promise<UpcomingRequest> {
+  const req = await fetch("/public/ajax/getAvailableSessions.php", { method: "POST" });
   if (!req.ok) throw new Error("Failed to get block data");
-  const data = (await req.json()) as BlockData;
+  const data = (await req.json()) as UpcomingRequest;
   return data;
 }
 
-export async function fetchSessionsForDate(date: Date): Promise<SessionData> {
-  const req = await fetch("public/ajax/getSessions.php", {
+export async function fetchSessionsForDate(date: Date): Promise<SessionRequest> {
+  const req = await fetch("/public/ajax/getSessions.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: createURLParams({ date: formatDate(date), period: (JSON.parse(window.siteData.periodkeys) as number[])[0] }),
   });
   if (!req.ok) throw new Error("Failed to get sessions for date");
-  const data = (await req.json()) as SessionData;
+  const data = (await req.json()) as SessionRequest;
   return data;
 }
 
-export interface BlockData {
+export interface UpcomingRequest {
   log: number;
   sessionhash: string;
-  sessions: Record<string, UpcomingSession>;
+  sessions: Record<string, [first: UpcomingSession]>;
   sessionsizes: Record<string, SessionSize>;
   roster: RosterData[];
   refreshTime: number;
@@ -85,7 +85,7 @@ export interface RequestData {
   pendingconfirm: string;
 }
 
-export interface SessionData {
+export interface SessionRequest {
   sessions: Session[];
   stats: Stats;
   students: Students;

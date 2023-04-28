@@ -15,6 +15,7 @@ export interface Block {
   description: string;
   id: string;
   location: string;
+  currentStudents: number;
   maxStudents: number;
   name: string;
   teacher: {

@@ -27,14 +27,14 @@ export default function Home() {
             <h3 class="mb-2 text-center text-lg font-normal text-gray-500">Today:</h3>
             <Suspense fallback={<SkeletonCard />}>
               <Show
-                when={undefined}
+                when={window.siteData.homeFlex as Block}
                 fallback={
                   <div class="flex h-full flex-col items-center justify-center">
                     <p class="text-center text-gray-500">You have no flex block today.</p>
                   </div>
                 }
               >
-                {(block) => <BlockCard block={block() as Block} />}
+                {(block) => <BlockCard block={block()} />}
               </Show>
             </Suspense>
           </div>

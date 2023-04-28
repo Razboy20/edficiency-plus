@@ -1,0 +1,64 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index efd4c4c8dab473fc254096811b5b883b8fc0effc..7ef2b01207f17d80ebec327a7618cfdb52808ace 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -1,15 +1,15 @@
+-import UnocssInspector from '@unocss/inspector';
+-import { cssIdRE, createGenerator, BetterMap, notNull, expandVariantGroup, attributifyRE, escapeRegExp, toEscapedSelector } from '@unocss/core';
++import remapping from '@ampproject/remapping';
+ import { createFilter } from '@rollup/pluginutils';
+ import { loadConfig } from '@unocss/config';
+-import { createHash } from 'node:crypto';
+-import MagicString from 'magic-string';
+-import { resolve, isAbsolute, dirname } from 'node:path';
+-import fs from 'node:fs/promises';
++import { BetterMap, attributifyRE, createGenerator, cssIdRE, escapeRegExp, expandVariantGroup, notNull, toEscapedSelector } from '@unocss/core';
++import UnocssInspector from '@unocss/inspector';
+ import fg from 'fast-glob';
+-import remapping from '@ampproject/remapping';
++import MagicString from 'magic-string';
+ import { Buffer } from 'node:buffer';
++import { createHash } from 'node:crypto';
+ import fs$1 from 'node:fs';
++import fs from 'node:fs/promises';
++import { dirname, isAbsolute, resolve } from 'node:path';
+ import { fileURLToPath } from 'node:url';
+
+ const defaultExclude = [cssIdRE];
+@@ -19,15 +19,15 @@ const VIRTUAL_ENTRY_ALIAS = [
+   /^(?:virtual:)?uno(?::(.+))?\.css(\?.*)?$/
+ ];
+ const LAYER_MARK_ALL = "__ALL__";
+-const RESOLVED_ID_WITH_QUERY_RE = /[\/\\]__uno(?:(_.*?))?\.css(\?.*)?$/;
+-const RESOLVED_ID_RE = /[\/\\]__uno(?:(_.*?))?\.css$/;
++const RESOLVED_ID_WITH_QUERY_RE = /[\/\\]uno(?:(_.*?))?\.css(\?.*)?$/;
++const RESOLVED_ID_RE = /[\/\\]uno(?:(_.*?))?\.css$/;
+ function resolveId(id) {
+   if (id.match(RESOLVED_ID_WITH_QUERY_RE))
+     return id;
+   for (const alias of VIRTUAL_ENTRY_ALIAS) {
+     const match = id.match(alias);
+     if (match) {
+-      return match[1] ? `/__uno_${match[1]}.css` : "/__uno.css";
++      return match[1] ? `/uno_${match[1]}.css` : "/uno.css";
+     }
+   }
+ }
+@@ -655,7 +655,7 @@ function GlobalModeDevPlugin({ uno, tokens, tasks, flushTasks, affectedModules,
+           return null;
+         const { hash, css } = await generateCSS(layer);
+         return {
+-          code: `__uno_hash_${hash}{--:'';}${css}`,
++          code: `uno_hash_${hash}{--:'';}${css}`,
+           map: { mappings: "" }
+         };
+       },
+@@ -675,7 +675,7 @@ function GlobalModeDevPlugin({ uno, tokens, tasks, flushTasks, affectedModules,
+         if (layer && code.includes("import.meta.hot")) {
+           let hmr = `
+ try {
+-  let hash = __vite__css.match(/__uno_hash_(\\w{${HASH_LENGTH}})/)
++  let hash = __vite__css.match(/uno_hash_(\\w{${HASH_LENGTH}})/)
+   hash = hash && hash[1]
+   if (!hash)
+     console.warn('[unocss-hmr]', 'failed to get unocss hash, hmr might not work')

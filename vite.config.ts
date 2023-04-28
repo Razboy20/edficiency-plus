@@ -1,6 +1,7 @@
 import { crx } from "@crxjs/vite-plugin";
 import { resolve } from "path";
 import solid from "solid-start/vite";
+import UnoCSS from "unocss/vite";
 import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
 import manifest from "./src/manifest";
@@ -26,6 +27,7 @@ export default defineConfig({
     }),
     crx({ manifest }),
     Icons({ compiler: "solid" }),
+    UnoCSS(),
   ],
   resolve: {
     alias: {
@@ -42,5 +44,13 @@ export default defineConfig({
   build: {
     outDir,
     sourcemap: isDev,
+    rollupOptions: {
+      output: {
+        // manualChunks: {
+        //   "contentscript-entry": ["src/pages/content/entry-client.tsx"],
+        //   solid: ["solid-js", "solid-start"],
+        // },
+      },
+    },
   },
 });

@@ -1,8 +1,11 @@
-import { createEffect, createSignal, For } from "solid-js";
+import { createEffect, createMemo, createSignal, For } from "solid-js";
 import ChevronLeftIcon from "~icons/heroicons/chevron-left-20-solid";
 import ChevronRightIcon from "~icons/heroicons/chevron-right-20-solid";
+import { useSession } from "../../components/AuthProvider";
 import CalendarDay from "../../components/CalendarDay";
 import Legend from "../../components/Legend";
+import { parseRoster } from "../../utils/block";
+import { sameDay } from "../../utils/date";
 
 function generateDates(currentDate: Date): Date[] {
   return new Array(5).fill(undefined).map((_, i) => {
@@ -13,10 +16,13 @@ function generateDates(currentDate: Date): Date[] {
 }
 
 export default function Home() {
+  const { block_info } = useSession();
+
   const currentDate = new Date();
 
   const [dates, setDates] = createSignal<Date[]>(generateDates(currentDate));
   const [weekOffset, setWeekOffset] = createSignal(0);
+  const roster = createMemo(() => parseRoster(block_info()));
 
   // show all the days of the week, including previous days of the week
 
@@ -79,35 +85,11 @@ export default function Home() {
           </h2>
         </div>
         <div class="md:grid-rows-0 grid w-full grow grid-rows-5 divide-y divide-zinc-300 md:grid-cols-5 md:grid-rows-1 md:divide-x md:divide-y-0">
-          <For each={dates()}>{(date) => <CalendarDay date={date} blocks={[]} selectedBlock={undefined} />}</For>
+          <For each={dates()}>
+            {(date) => <CalendarDay date={date} selectedBlock={roster()?.find((block) => sameDay(block.date, date))} />}
+          </For>
         </div>
         <Legend />
-        {/* <button
-          class={clsx("m-3 flex w-fit items-center rounded-md bg-gray-700 px-3 py-2 text-white transition-colors", {
-            "!bg-gray-600": loading(),
-          })}
-          disabled={loading()}
-          onClick={async () => {
-            await refetch();
-          }}
-        >
-          <Show when={!isServer && loading()}>
-            <svg
-              class="-ml-1 mr-2 h-5 w-5 animate-spin text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-          </Show>
-          Refetch
-        </button> */}
       </div>
     </div>
   );

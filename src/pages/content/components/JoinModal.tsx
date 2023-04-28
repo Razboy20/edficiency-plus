@@ -1,4 +1,5 @@
 import uFuzzy from "@leeoniya/ufuzzy";
+import { createScrollPosition } from "@solid-primitives/scroll";
 import { Dialog, DialogOverlay, DialogPanel, DialogTitle, Transition, TransitionChild } from "solid-headless";
 import type { VoidProps } from "solid-js";
 import {
@@ -31,6 +32,8 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
   const [isOpen, setIsOpen] = createSignal(false);
   const [selectedBlock, setSelectedBlock] = createSignal<Block>();
   const [search, setSearch] = createSignal("");
+  const [scrollContainer, setScrollContainer] = createSignal<HTMLDivElement>();
+  const scroll = createScrollPosition(scrollContainer);
 
   const isSelected = createSelector(selectedBlock, (id: string, source?: Block) => source?.id == id);
 
@@ -63,52 +66,59 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
       if (!sessions) return;
 
       return sessions.map(
-        (block) => `${block.name}¦${block.detail}¦${block.lastname}, ${block.firstname}¦${block.location}`
+        (block) => `${block.name}¦${block.lastname}, ${block.firstname}¦${block.location}¦${block.detail}`
       );
     });
 
     const result = createMemo(() => {
-      if (!searchableBlocks()) return undefined;
+      if (!searchableBlocks()) return;
 
+      const haystack = searchableBlocks();
       const searchValue = search();
 
       if (searchValue.length == 0) return blocks.latest.sessions;
-      return fuzzy.filter(searchableBlocks(), searchValue)?.map((i) => untrack(() => blocks.latest.sessions[i]));
+      const indexes = fuzzy.filter(haystack, searchValue);
+      if (indexes != null && indexes.length > 0) {
+        const info = fuzzy.info(indexes, haystack, searchValue);
+        return fuzzy.sort(info, haystack, searchValue).map((i) => untrack(() => blocks.latest.sessions[info.idx[i]]));
+      }
     });
 
     return (
-      <For
-        each={result()?.map((e) => parseSession(e))}
-        fallback={
-          <div class="text-md mx-3 my-11 text-center text-gray-600">
-            Oops! Looks like there aren't any blocks available to flex into for today.
-          </div>
-        }
-      >
-        {(block) => (
-          <div
-            class="min-w-[20rem] cursor-pointer rounded-xl opacity-70 outline-4 ring-0 ring-blue-500/50 transition duration-150 focus:outline-blue-400"
-            tabIndex={0}
-            classList={{
-              "!opacity-100 ring-4": isSelected(block.id),
-            }}
-            onClick={[setSelectedBlock, block]}
-            onKeyPress={(e) => {
-              if (e.key == "Enter") {
-                setSelectedBlock(block);
-              }
-            }}
-          >
-            <BlockCard block={block} class="!min-h-0" showTotal></BlockCard>
-          </div>
-        )}
-      </For>
+      <>
+        <For
+          each={result()?.map((e) => parseSession(e))}
+          fallback={
+            <div class="text-md mx-3 my-11 text-center text-gray-600">
+              Oops! Looks like there aren't any blocks available to flex into for today.
+            </div>
+          }
+        >
+          {(block) => (
+            <div
+              class="btn-transition min-w-[20rem] cursor-pointer rounded-xl opacity-70 outline-4 ring-0 ring-blue-500/50 duration-150 hover:opacity-100 focus:outline-blue-400 active:scale-[0.97]"
+              tabIndex={0}
+              classList={{
+                "!opacity-100 ring-4": isSelected(block.id),
+              }}
+              onClick={[setSelectedBlock, block]}
+              onKeyPress={(e) => {
+                if (e.key == "Enter") {
+                  setSelectedBlock(block);
+                }
+              }}
+            >
+              <BlockCard block={block} class="!min-h-0" showTotal></BlockCard>
+            </div>
+          )}
+        </For>
+      </>
     );
   }
 
   return (
-    <Transition show={props.open} class="hidden">
-      <Portal>
+    <Portal>
+      <Transition show={props.open}>
         <Dialog isOpen onClose={props.onClose} class="relative z-50">
           <TransitionChild
             as="div"
@@ -141,14 +151,31 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
                     <p class="text-sm text-gray-500">Choose a block in the list to flex into.</p>
                   </div>
                   <input
-                    class="my-4 h-10 w-full flex-shrink-0 rounded-lg border border-gray-300 px-4 outline-none ring-blue-500/50 transition hover:border-gray-400 focus-visible:border-blue-500 focus-visible:ring-4"
+                    class="my-4 h-10 w-full flex-shrink-0 rounded-lg border border-gray-300 px-4 outline-none ring-blue-500/50 transition hover:border-gray-400 focus-visible:border-blue-500"
                     value={search()}
                     onInput={(e) => setSearch(e.currentTarget.value)}
                     placeholder="Search blocks..."
                     type="text"
                   />
-                  <div class="mx-2 flex w-[clamp(1px,24rem,24rem)] flex-auto flex-col gap-3 overflow-y-auto rounded-xl p-1 py-1.5">
-                    <Suspense fallback={<SkeletonCard class="!min-h-0 min-w-[20rem]" />}>
+                  <div
+                    class="z-1 pointer-events-none -mt-10 h-10 w-full flex-shrink-0 shadow"
+                    style={{
+                      "--tw-shadow": "0 14px 14px -14px rgb(0 0 0 / 0.3)",
+                      opacity: scroll.y > 1 ? `${Math.max(0, Math.min(scroll.y * 4, 100))}%` : "0",
+                    }}
+                  ></div>
+                  <div
+                    class="relative mx-2 flex w-[clamp(1px,24rem,24rem)] flex-auto translate-x-0 flex-col gap-3 overflow-y-auto rounded-xl p-1 py-1.5"
+                    ref={setScrollContainer}
+                  >
+                    <Suspense
+                      fallback={
+                        <>
+                          <SkeletonCard class="!min-h-0 min-w-[20rem]" />
+                          <SkeletonCard class="!min-h-0 min-w-[20rem]" />
+                        </>
+                      }
+                    >
                       <SearchResults />
                     </Suspense>
                   </div>
@@ -178,7 +205,7 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
             </div>
           </div>
         </Dialog>
-      </Portal>
-    </Transition>
+      </Transition>
+    </Portal>
   );
 }

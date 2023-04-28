@@ -42,6 +42,8 @@
     "vite.config.ts",
     "node_modules/@types",
     "src/manifest.ts",
-    ".eslintrc.cjs"
+    ".eslintrc.cjs",
+    "unocss.config.cjs",
+    "postcss.config.cjs"
   ],
 }

@@ -1,4 +1,4 @@
-import type { BlockData } from "@src/pages/content/utils/api";
+import type { UpcomingRequest } from "@src/pages/content/utils/api";
 import { fetchBlockData, fetchProfileData } from "@src/pages/content/utils/api";
 import type { Resource } from "solid-js";
 import { createContext, createResource, useContext, type JSX } from "solid-js";
@@ -6,7 +6,7 @@ import type { Profile } from "../types/globals";
 
 const authContext = createContext<{
   profile: Resource<Profile>;
-  block_info: Resource<BlockData>;
+  block_info: Resource<UpcomingRequest>;
 }>();
 
 export const useSession = () => {

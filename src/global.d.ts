@@ -50,6 +50,7 @@ declare global {
       urlparams: string;
       maxhotspots: string;
       upcominghotspots: string;
+      homeFlex?: Block;
     };
   }
 }

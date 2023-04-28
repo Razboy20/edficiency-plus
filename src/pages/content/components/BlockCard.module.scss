@@ -1,8 +1,8 @@
 .block_card {
   @apply relative min-h-[14rem] w-full overflow-hidden rounded-xl border-2 px-4 py-4 shadow focus-visible:outline-blue-400;
 
-  --_border-color: theme(colors.zinc.300);
-  --_bg-color: theme(colors.zinc.200);
+  --_border-color: theme("colors.zinc.300");
+  --_bg-color: theme("colors.zinc.200");
 
   background: var(--_bg-color);
   border-color: var(--_border-color);
@@ -29,22 +29,22 @@
 
   &.color__ {
     &mandatory {
-      --_border-color: theme(colors.red.300);
-      --_bg-color: theme(colors.red.200);
+      --_border-color: theme("colors.red.300");
+      --_bg-color: theme("colors.red.200");
     }
 
     &cte-priority {
-      --_border-color: theme(colors.purple.300);
-      --_bg-color: theme(colors.purple.200);
+      --_border-color: theme("colors.purple.300");
+      --_bg-color: theme("colors.purple.200");
     }
 
     &pep-rally {
-      --_border-color: theme(colors.teal.300);
-      --_bg-color: theme(colors.teal.200);
+      --_border-color: theme("colors.teal.300");
+      --_bg-color: theme("colors.teal.200");
     }
     &waitlist {
-      --_border-color: theme(colors.yellow.300);
-      --_bg-color: theme(colors.yellow.200);
+      --_border-color: theme("colors.yellow.300");
+      --_bg-color: theme("colors.yellow.200");
     }
   }
 }

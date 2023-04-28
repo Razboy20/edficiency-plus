@@ -25,15 +25,19 @@ export default function BlockCard(props: BlockCardProps) {
   const colorClass = () => (block().waitlisted ? styles.color__waitlist : colorMap[block().type]);
 
   return (
-    <div class={clsx(styles.block_card, colorClass(), props.class)} tabIndex={props.focusable ? 0 : undefined}>
+    <div
+      class={clsx(styles.block_card, colorClass(), props.class)}
+      tabIndex={props.focusable ? 0 : undefined}
+      data-id={block().id}
+    >
       <Show when={props.showTotal}>
         <div class={styles.count}>
           <span
             classList={{
-              "text-orange-700": block().openSeats <= 5 && block().openSeats > 0,
+              "text-amber-700": block().openSeats <= 5 && block().openSeats > 0,
             }}
           >
-            {block().openSeats}
+            {block().currentStudents} / {block().maxStudents}
           </span>
           <span class="font-normal"> {block().openSeats == 1 ? "seat" : "seats"}</span>
         </div>

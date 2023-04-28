@@ -18,8 +18,10 @@
   "dependencies": {
     "@leeoniya/ufuzzy": "^1.0.6",
     "@solid-primitives/resize-observer": "^2.0.15",
+    "@solid-primitives/scroll": "^2.0.14",
     "@solidjs/meta": "^0.28.4",
     "@solidjs/router": "^0.8.2",
+    "@unocss/reset": "^0.51.8",
     "clsx": "^1.2.1",
     "solid-headless": "https://gitpkg.now.sh/Razboy20/solid-headless/packages/solid-headless?build",
     "solid-js": "^1.7.3",
@@ -27,12 +29,17 @@
     "undici": "^5.21.2"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "2.0.0-beta.7",
+    "@crxjs/vite-plugin": "2.0.0-beta.16",
     "@iconify-json/heroicons": "^1.1.10",
     "@types/chrome": "0.0.231",
     "@types/node": "18.15.11",
     "@typescript-eslint/eslint-plugin": "5.58.0",
     "@typescript-eslint/parser": "5.58.0",
+    "@unocss/eslint-config": "^0.51.8",
+    "@unocss/preset-web-fonts": "^0.51.8",
+    "@unocss/preset-wind": "^0.51.8",
+    "@unocss/transformer-directives": "^0.51.8",
+    "@unocss/transformer-variant-group": "^0.51.8",
     "autoprefixer": "^10.4.14",
     "babel-preset-solid": "^1.7.3",
     "eslint": "8.38.0",
@@ -41,25 +48,23 @@
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-solid": "^0.12.1",
-    "eslint-plugin-tailwindcss": "^3.11.0",
     "fs-extra": "11.1.1",
     "postcss": "^8.4.21",
     "prettier": "2.8.7",
-    "prettier-plugin-tailwindcss": "^0.2.7",
     "sass": "1.62.0",
     "solid-start-node": "^0.2.26",
     "solid-start-static": "^0.2.26",
-    "tailwindcss": "^3.3.1",
     "ts-loader": "9.4.2",
     "ts-node": "10.9.1",
     "typescript": "5.0.4",
+    "unocss": "^0.51.8",
     "unplugin-icons": "^0.16.1",
     "vite": "4.3.0-beta.5",
     "vite-plugin-solid": "^2.7.0"
   },
   "pnpm": {
     "patchedDependencies": {
-      "@crxjs/vite-plugin@2.0.0-beta.7": "patches/@crxjs__vite-plugin@2.0.0-beta.7.patch"
+      "@unocss/vite@0.51.8": "patches/@unocss__vite@0.51.8.patch"
     }
   }
 }

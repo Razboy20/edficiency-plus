@@ -1,10 +1,11 @@
 // @refresh reload
+import "@unocss/reset/tailwind-compat.css";
+
+import "virtual:uno.css";
 import "~/assets/css/global.scss";
 
 import { createSignal, Suspense } from "solid-js";
 import { Body, ErrorBoundary, FileRoutes, Head, Html, Link, Meta, Routes, Scripts, Title } from "solid-start";
-
-import { FastSpinner } from "./components/Spinner";
 
 export default function Root() {
   // const styles: StyleData[] = [];
@@ -29,11 +30,11 @@ export default function Root() {
           {/* <StyleRegistry styles={styles}>
                 <Style>{renderSheets(styles)}</Style> */}
           <Suspense
-            fallback={
-              <div>
-                <FastSpinner class="fixed right-4 top-4 h-6 w-6 stroke-2 text-blue-500" show />
-              </div>
-            }
+          // fallback={
+          //   <div>
+          //     <FastSpinner class="fixed right-4 top-4 h-6 w-6 stroke-2 text-blue-500" show />
+          //   </div>
+          // }
           >
             <Routes>
               <FileRoutes />

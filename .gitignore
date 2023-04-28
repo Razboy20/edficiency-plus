@@ -15,3 +15,5 @@
 
 #generated manifest
 public/manifest.json
+
+vite.config.ts.timestamp-*

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { VoidProps } from "solid-js";
-import { createEffect, createSignal, lazy, Show, Suspense } from "solid-js";
+import { createSignal, lazy, Show, Suspense } from "solid-js";
 import { sameDay } from "../utils/date";
 
 import type { Block } from "../types/globals";
@@ -8,6 +8,7 @@ import { BlockType } from "../types/globals";
 import BlockCard from "./BlockCard";
 import styles from "./CalendarDay.module.scss";
 // import JoinModal from "./JoinModal";
+import { useSession } from "./AuthProvider";
 import SkeletonCard from "./skeletons/SkeletonCard";
 const JoinModal = lazy(() => import("./JoinModal"));
 
@@ -16,18 +17,17 @@ const weekdays_short = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
 
 interface CalendarDayProps {
   date: Date;
-  blocks?: Block[];
   selectedBlock?: Block;
 }
 
 export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
+  const { block_info } = useSession();
+
   const currentDate = new Date();
 
   const [modalOpen, setModalOpen] = createSignal(false);
 
-  createEffect(() => {
-    console.info("[CalendarBlock]:", props.selectedBlock);
-  });
+  const emptyDay = () => !block_info()?.roster?.find((e) => sameDay(props.date, e.date.replaceAll("-", "/")));
 
   return (
     <div
@@ -45,10 +45,6 @@ export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
       </h1>
       <div class={styles.separator} />
       <Suspense fallback={<SkeletonCard />}>
-        <Show when={props.selectedBlock}>{(block) => <BlockCard block={block()} />}</Show>
-        <Show when={!props.selectedBlock}>
-          <SkeletonCard class="invisible" empty />
-        </Show>
         <Show
           when={
             !props.selectedBlock ||
@@ -59,12 +55,18 @@ export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
         >
           <button
             class={styles.join_button}
-            disabled={currentDate.getTime() > props.date.getTime() || sameDay(currentDate, props.date)}
+            title={emptyDay() ? "No flex blocks are available today." : ""}
+            disabled={currentDate.getTime() > props.date.getTime() || sameDay(currentDate, props.date) || emptyDay()}
             onClick={[setModalOpen, true]}
           >
             Join Flex
           </button>
         </Show>
+        <Show when={props.selectedBlock}>{(block) => <BlockCard block={block()} />}</Show>
+        <Show when={!props.selectedBlock}>
+          <SkeletonCard class="invisible" empty />
+        </Show>
+
         <Suspense>
           {/* <Transition show={modalOpen()}> */}
           <JoinModal

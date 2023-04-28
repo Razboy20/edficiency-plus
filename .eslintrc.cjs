@@ -11,6 +11,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:solid/typescript",
+    "@unocss",
     "prettier",
   ],
   parser: "@typescript-eslint/parser",
@@ -23,7 +24,7 @@ module.exports = {
     project: ["./tsconfig.json"],
   },
   plugins: ["@typescript-eslint", "solid", "prettier"],
-  ignorePatterns: ["node_modules/**", "**/dist/**", ".solid/**"],
+  ignorePatterns: ["node_modules/**", "**/dist/**", "!**/.*", "pnpm-lock.yaml"],
   rules: {
     "prettier/prettier": [
       "warn",
