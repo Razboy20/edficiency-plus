@@ -31,6 +31,21 @@ export async function fetchSessionsForDate(date: Date): Promise<SessionRequest> 
   return data;
 }
 
+export async function joinBlock(date: Date, sessionId: number | string) {
+  await fetch("/public/ajax/addStudentSessionRequest.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: createURLParams({
+      date: formatDate(date),
+      sesid: sessionId,
+      pid: (JSON.parse(window.siteData.periodkeys) as number[])[0],
+      priority: 0,
+      frontrow: "",
+      note: "note",
+    }),
+  });
+}
+
 export interface UpcomingRequest {
   log: number;
   sessionhash: string;

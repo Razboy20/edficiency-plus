@@ -7,6 +7,7 @@ import type { Profile } from "../types/globals";
 const authContext = createContext<{
   profile: Resource<Profile>;
   block_info: Resource<UpcomingRequest>;
+  refetchBlockInfo: (info?: unknown) => UpcomingRequest | Promise<UpcomingRequest>;
 }>();
 
 export const useSession = () => {
@@ -19,7 +20,12 @@ export const useSession = () => {
 
 export const AuthProvider = (props: { children: JSX.Element }) => {
   const [profile] = createResource(() => fetchProfileData());
-  const [blocks] = createResource(() => fetchBlockData());
+  const [blocks, { refetch }] = createResource(() => fetchBlockData());
 
-  return <authContext.Provider value={{ profile, block_info: blocks }} children={props.children} />;
+  return (
+    <authContext.Provider
+      value={{ profile, block_info: blocks, refetchBlockInfo: refetch }}
+      children={props.children}
+    />
+  );
 };

@@ -7,3 +7,9 @@ export function sameDay(d1: Date | string, d2: Date | string) {
 export function formatDate(date: Date) {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
+
+export function getWeekNumber(date: Date) {
+  const firstWeekday = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  const offsetDate = date.getDate() + firstWeekday - 1;
+  return Math.ceil(offsetDate / 7);
+}

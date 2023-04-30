@@ -55,7 +55,7 @@ async function start() {
     } as Block;
   }
 
-  if (!window.siteData.loggedin) {
+  if (window.siteData.loggedin !== "true") {
     localStorage.setItem(
       "loginUrl",
       (

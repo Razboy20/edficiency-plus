@@ -117,7 +117,6 @@ export default function Navbar() {
                   replace: true,
                 });
               });
-              // await authClient.logout({ redirectTo: "/login" });
             }}
           >
             Log Out

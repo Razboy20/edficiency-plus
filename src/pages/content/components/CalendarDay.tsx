@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { VoidProps } from "solid-js";
-import { createSignal, lazy, Show, Suspense } from "solid-js";
+import { Show, Suspense, createSignal, lazy } from "solid-js";
 import { sameDay } from "../utils/date";
 
 import type { Block } from "../types/globals";
@@ -8,6 +8,7 @@ import { BlockType } from "../types/globals";
 import BlockCard from "./BlockCard";
 import styles from "./CalendarDay.module.scss";
 // import JoinModal from "./JoinModal";
+import { joinBlock } from "../utils/api";
 import { useSession } from "./AuthProvider";
 import SkeletonCard from "./skeletons/SkeletonCard";
 const JoinModal = lazy(() => import("./JoinModal"));
@@ -21,13 +22,15 @@ interface CalendarDayProps {
 }
 
 export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
-  const { block_info } = useSession();
+  const { block_info, refetchBlockInfo } = useSession();
 
   const currentDate = new Date();
 
   const [modalOpen, setModalOpen] = createSignal(false);
 
-  const emptyDay = () => !block_info()?.roster?.find((e) => sameDay(props.date, e.date.replaceAll("-", "/")));
+  const emptyDay = () =>
+    block_info.state !== "pending" &&
+    !block_info.latest?.roster?.find((e) => sameDay(props.date, e.date.replaceAll("-", "/")));
 
   return (
     <div
@@ -44,24 +47,25 @@ export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
         <span class={styles.date}>{props.date.getDate()}</span>
       </h1>
       <div class={styles.separator} />
-      <Suspense fallback={<SkeletonCard />}>
-        <Show
-          when={
-            !props.selectedBlock ||
-            (props.selectedBlock &&
-              props.selectedBlock.type != BlockType.CtePriority &&
-              props.selectedBlock.type != BlockType.Mandatory)
-          }
+      <Show
+        when={
+          block_info.loading ||
+          !props.selectedBlock ||
+          (props.selectedBlock &&
+            props.selectedBlock.type != BlockType.CtePriority &&
+            props.selectedBlock.type != BlockType.Mandatory)
+        }
+      >
+        <button
+          class={styles.join_button}
+          title={emptyDay() ? "No flex blocks are available today." : ""}
+          disabled={currentDate.getTime() > props.date.getTime() || sameDay(currentDate, props.date) || emptyDay()}
+          onClick={[setModalOpen, true]}
         >
-          <button
-            class={styles.join_button}
-            title={emptyDay() ? "No flex blocks are available today." : ""}
-            disabled={currentDate.getTime() > props.date.getTime() || sameDay(currentDate, props.date) || emptyDay()}
-            onClick={[setModalOpen, true]}
-          >
-            Join Flex
-          </button>
-        </Show>
+          Join Flex
+        </button>
+      </Show>
+      <Suspense fallback={<SkeletonCard />}>
         <Show when={props.selectedBlock}>{(block) => <BlockCard block={block()} />}</Show>
         <Show when={!props.selectedBlock}>
           <SkeletonCard class="invisible" empty />
@@ -75,18 +79,9 @@ export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
             activeBlock={props.selectedBlock}
             onClose={() => setModalOpen(false)}
             // eslint-disable-next-line solid/reactivity
-            selectBlock={async (_block) => {
-              // await joinMutation(
-              //   {
-              //     id: block.id,
-              //   },
-              //   {
-              //     additionalTypenames: ["Block"],
-              //   }
-              // );
-              // // eslint-disable-next-line no-debugger
-              // // debugger;
-              // await refetchRouteData("gql_me");
+            selectBlock={async (block) => {
+              await joinBlock(props.date, block.id);
+              await refetchBlockInfo();
             }}
           ></JoinModal>
           {/* </Transition> */}

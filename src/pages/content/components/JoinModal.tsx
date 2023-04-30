@@ -10,6 +10,7 @@ import {
   createResource,
   createSelector,
   createSignal,
+  on,
   untrack,
 } from "solid-js";
 import { Portal } from "solid-js/web";
@@ -44,6 +45,18 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
     {
       initialValue: undefined,
     }
+  );
+
+  const [scrollBottom, setScrollBottom] = createSignal(0);
+  createEffect(
+    on(blocks, () => {
+      const container = scrollContainer();
+      if (!container) return;
+
+      requestAnimationFrame(() =>
+        setScrollBottom(container.scrollHeight - container.clientHeight - container.scrollTop)
+      );
+    })
   );
 
   createEffect(() => {
@@ -96,7 +109,7 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
         >
           {(block) => (
             <div
-              class="btn-transition min-w-[20rem] cursor-pointer rounded-xl opacity-70 outline-4 ring-0 ring-blue-500/50 duration-150 active:scale-[0.97] hover:opacity-100 focus:outline-blue-400"
+              class="min-w-[20rem] cursor-pointer rounded-xl opacity-70 outline-4 ring-0 ring-blue-500/50 duration-150 btn-transition active:scale-[0.97] hover:opacity-100 focus:outline-blue-400"
               tabIndex={0}
               classList={{
                 "!opacity-100 ring-4": isSelected(block.id),
@@ -160,7 +173,7 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
                   <div
                     class="pointer-events-none z-1 h-10 w-full flex-shrink-0 shadow -mt-10"
                     style={{
-                      "--tw-shadow": "0 14px 14px -14px rgb(0 0 0 / 0.3)",
+                      "--un-shadow": "0 14px 14px -14px rgb(0 0 0 / 0.3)",
                       opacity: scroll.y > 1 ? `${Math.max(0, Math.min(scroll.y * 4, 100))}%` : "0",
                     }}
                   ></div>
@@ -180,10 +193,22 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
                     </Suspense>
                   </div>
 
+                  <div
+                    class="pointer-events-none z-1 h-10 w-full flex-shrink-0 shadow -mb-10"
+                    style={{
+                      "--un-shadow": "0 -14px 14px -14px rgb(0 0 0 / 0.3)",
+                      opacity:
+                        (console.log(scrollBottom(), scroll.y),
+                        scroll.y < scrollBottom() - 1
+                          ? `${Math.max(0, Math.min((scrollBottom() - scroll.y) * 4, 100))}%`
+                          : "0"),
+                    }}
+                  ></div>
+
                   <div class="mt-4 space-x-2">
                     <button
                       type="button"
-                      class="btn bg-red-100 font-semibold text-red-900 hover:bg-red-200"
+                      class="bg-red-100 font-semibold text-red-900 hover:bg-red-200 btn"
                       onClick={() => props.onClose()}
                     >
                       Cancel
@@ -191,7 +216,7 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
                     <button
                       type="button"
                       disabled={!selectedBlock()}
-                      class="btn bg-blue-100 font-semibold text-blue-900 hover:bg-blue-200"
+                      class="bg-blue-100 font-semibold text-blue-900 hover:bg-blue-200 btn"
                       onClick={() => {
                         props.selectBlock(selectedBlock()!);
                         props.onClose();

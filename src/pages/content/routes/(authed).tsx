@@ -4,24 +4,7 @@ import { AuthProvider } from "../components/AuthProvider";
 import Navbar from "../components/Navbar";
 import { FastSpinner } from "../components/Spinner";
 
-// export function routeData() {
-//   return createServerData$(
-//     async (_, { request }) => {
-//       // return await authenticator.isAuthenticated(request, {
-//       //   failureRedirect: "/login",
-//       // });
-//       return { id: 1, name: "test" };
-//       // return (user ? user : redirect("/login")) as unknown as DbUser;
-//     },
-//     {
-//       deferStream: true,
-//       key: "auth_user",
-//     }
-//   );
-// }
-
 export function routeData() {
-  // check if phpsessionid is set in cookie
   // if (!window.loggedIn) {
   //   const navigate = useNavigate();
   //   navigate("/login", {
@@ -37,6 +20,9 @@ export default function AuthHandler() {
     const navigate = useNavigate();
     navigate("/login", {
       replace: true,
+      state: {
+        returnTo: location.pathname,
+      },
     });
 
     // eslint-disable-next-line solid/components-return-once
@@ -45,7 +31,7 @@ export default function AuthHandler() {
 
   return (
     // <UrqlProvider>
-    <div class="flex h-screen w-full flex-col">
+    <div class="h-screen w-full flex flex-col">
       <Navbar />
       <div class="h-full w-full flex-1 overflow-auto">
         <Suspense
@@ -53,7 +39,7 @@ export default function AuthHandler() {
           fallback={
             <div>
               <FastSpinner
-                class="fixed left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 stroke-2 text-blue-500"
+                class="fixed left-1/2 top-1/2 h-6 w-6 stroke-2 text-blue-500 -translate-x-1/2 -translate-y-1/2"
                 show
               />
             </div>

@@ -56,22 +56,16 @@ export default function Home() {
   const [loading, setLoading] = createSignal(false);
 
   return (
-    <div class="absolute left-1/2 top-[calc(50%-15px)] w-full max-w-[38em] -translate-x-1/2 -translate-y-1/2 space-y-5 rounded-xl bg-white p-7 shadow-lg">
+    <div class="absolute left-1/2 top-[calc(50%-15px)] max-w-[38em] w-full rounded-xl bg-white p-7 shadow-lg -translate-x-1/2 -translate-y-1/2 space-y-5">
       <h2 class="text-2xl font-bold">Login to manage your student flexes.</h2>
       <button
-        class="focusable flex w-full transform-gpu items-center justify-center gap-2.5 rounded-md border border-blue-500 bg-white p-3 text-base font-bold text-gray-800 transition hover:scale-[1.01] hover:border-sky-500 hover:text-gray-900 active:scale-100 active:border-sky-500 active:bg-sky-50/70 active:hover:shadow disabled:border-gray-400 disabled:bg-gray-50 disabled:text-gray-700"
+        class="w-full flex transform-gpu items-center justify-center gap-2.5 border border-blue-500 rounded-md bg-white p-3 text-base font-bold text-gray-800 transition active:scale-100 hover:scale-[1.01] active:border-sky-500 disabled:border-gray-400 hover:border-sky-500 active:bg-sky-50/70 disabled:bg-gray-50 disabled:text-gray-700 hover:text-gray-900 focusable active:hover:shadow"
         disabled={loading()}
         onClick={() => {
           console.log("logging in...");
           setLoading(true);
           try {
-            location.href =
-              "https://accounts.google.com/o/oauth2/auth?response_type=code&access_type=online&client_id=469334674292-gub9dp73tt9rm3dpvmvepklu8hop8uhf.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Flb01.edf.school%2Fpublic%2FloginWithGoogle.php&state=%257B%2522siteid%2522%253A%2522westwood%2522%257D&scope=email%20profile&approval_prompt=auto";
-            // const test = (await authClient.login("google", {
-            //   successRedirect: `${location?.origin}/`,
-            //   failureRedirect: `${location?.origin}/`,
-            // })) as User;
-            // console.log(test);
+            location.href = localStorage.getItem("loginUrl");
           } catch (e) {
             setLoading(false);
             console.error(e);

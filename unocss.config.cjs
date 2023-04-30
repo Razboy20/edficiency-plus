@@ -1,5 +1,5 @@
+import presetUno from "@unocss/preset-uno";
 import presetWebFonts from "@unocss/preset-web-fonts";
-import presetWind from "@unocss/preset-wind";
 import transformerDirectives from "@unocss/transformer-directives";
 import transformerVariantGroup from "@unocss/transformer-variant-group";
 import { defineConfig } from "unocss";
@@ -27,11 +27,15 @@ export default defineConfig({
     },
   },
   presets: [
-    presetWind(),
+    presetUno(),
     presetWebFonts({
       provider: "google",
       fonts: {
-        sans: "Montserrat",
+        sans: {
+          name: "Montserrat",
+          weights: ["300", "400", "600", "700"],
+          italic: true,
+        },
       },
     }),
   ],
