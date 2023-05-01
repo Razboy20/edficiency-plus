@@ -10,6 +10,12 @@ export default defineConfig({
       "btn-transition",
       { transition: "color 180ms, border-color 150ms, background-color 150ms, box-shadow 150ms, transform 50ms" },
     ],
+    [
+      "ring-offset-0",
+      {
+        "--un-ring-offset-width": "0px",
+      },
+    ],
   ],
   shortcuts: {
     btn: `
@@ -17,8 +23,8 @@ export default defineConfig({
       outline-none ring-blue-500/50 ring-offset-2 focus-visible:ring-4
       active:scale-[0.96] disabled:active:scale-100
       `,
-    focusable: "outline-none ring-blue-500/50 ring-offset-2 focus-visible:ring-4",
-    link: "relative text-cyan-500 transition-all after:(content-empty pointer-events-none absolute inset-x-0.5 bottom-0 h-px translate-y-0.5 rounded-full bg-current opacity-0 transition-all duration-100 ease-in-out-expo) hover:after:inset-x-0 hover:after:translate-y-0 hover:after:opacity-100",
+    focusable: "outline-none ring-blue-500/50 ring-offset-2 ring-0 focus-visible:ring-4",
+    link: "relative text-cyan-500 transition-all after:(content-empty pointer-events-none absolute inset-x-0.5 bottom-0 h-px translate-y-0.5 rounded-full bg-current opacity-0 transition-all duration-100 ease-in-out-expo) hover:after:(inset-x-0 translate-y-0 opacity-100)",
   },
   theme: {
     easing: {

@@ -8,8 +8,9 @@ import { BlockType } from "../types/globals";
 import BlockCard from "./BlockCard";
 import styles from "./CalendarDay.module.scss";
 // import JoinModal from "./JoinModal";
-import { joinBlock } from "../utils/api";
+import { joinBlock, leaveBlock } from "../utils/api";
 import { useSession } from "./AuthProvider";
+import { useLoader } from "./LoadingProvider";
 import SkeletonCard from "./skeletons/SkeletonCard";
 const JoinModal = lazy(() => import("./JoinModal"));
 
@@ -23,6 +24,7 @@ interface CalendarDayProps {
 
 export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
   const { block_info, refetchBlockInfo } = useSession();
+  const loaders = useLoader();
 
   const currentDate = new Date();
 
@@ -34,7 +36,7 @@ export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
 
   return (
     <div
-      class={clsx(styles.calendar_day, {
+      class={clsx("group", styles.calendar_day, {
         [styles.current_day]: sameDay(currentDate, props.date),
       })}
     >
@@ -66,7 +68,36 @@ export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
         </button>
       </Show>
       <Suspense fallback={<SkeletonCard />}>
-        <Show when={props.selectedBlock}>{(block) => <BlockCard block={block()} />}</Show>
+        <Show when={props.selectedBlock}>
+          {(block) => (
+            <>
+              <BlockCard
+                class={clsx("peer", {
+                  "animate-pulse": loaders.resources.block_info(),
+                })}
+                block={block()}
+              />
+              <div class="relative mx-auto hidden before:(pointer-events-auto absolute content-empty -inset-5) -mt-1 hover:block peer-hover:block">
+                <button
+                  class="cursor-pointer bg-transparent text-center text-gray-500 active:scale-96 link"
+                  disabled={loaders.resources.block_info()}
+                  onClick={() => {
+                    loaders.updateStatus("blocks", true);
+                    // edficiency being edficiency ._.
+                    const promises = [leaveBlock(props.date)];
+                    setTimeout(async () => {
+                      promises.push(leaveBlock(props.date));
+                      await Promise.any(promises);
+                      await refetchBlockInfo();
+                    }, 75);
+                  }}
+                >
+                  Leave block
+                </button>
+              </div>
+            </>
+          )}
+        </Show>
         <Show when={!props.selectedBlock}>
           <SkeletonCard class="invisible" empty />
         </Show>
@@ -80,6 +111,7 @@ export default function CalendarDay(props: VoidProps<CalendarDayProps>) {
             onClose={() => setModalOpen(false)}
             // eslint-disable-next-line solid/reactivity
             selectBlock={async (block) => {
+              loaders.updateStatus("blocks", true);
               await joinBlock(props.date, block.id);
               await refetchBlockInfo();
             }}

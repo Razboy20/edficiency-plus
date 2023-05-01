@@ -46,6 +46,14 @@ export async function joinBlock(date: Date, sessionId: number | string) {
   });
 }
 
+export async function leaveBlock(date: Date) {
+  await fetch("/public/ajax/deleteStudentEnrollmentRequest.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: createURLParams({ date: formatDate(date), pid: (JSON.parse(window.siteData.periodkeys) as number[])[0] }),
+  });
+}
+
 export interface UpcomingRequest {
   log: number;
   sessionhash: string;

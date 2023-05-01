@@ -62,7 +62,6 @@ export default function Home() {
         class="w-full flex transform-gpu items-center justify-center gap-2.5 border border-blue-500 rounded-md bg-white p-3 text-base font-bold text-gray-800 transition active:scale-100 hover:scale-[1.01] active:border-sky-500 disabled:border-gray-400 hover:border-sky-500 active:bg-sky-50/70 disabled:bg-gray-50 disabled:text-gray-700 hover:text-gray-900 focusable active:hover:shadow"
         disabled={loading()}
         onClick={() => {
-          console.log("logging in...");
           setLoading(true);
           try {
             location.href = localStorage.getItem("loginUrl");

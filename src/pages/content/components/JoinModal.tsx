@@ -49,7 +49,7 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
 
   const [scrollBottom, setScrollBottom] = createSignal(0);
   createEffect(
-    on(blocks, () => {
+    on([blocks, search], () => {
       const container = scrollContainer();
       if (!container) return;
 
@@ -198,10 +198,9 @@ export default function JoinModal(props: VoidProps<JoinModalProps>) {
                     style={{
                       "--un-shadow": "0 -14px 14px -14px rgb(0 0 0 / 0.3)",
                       opacity:
-                        (console.log(scrollBottom(), scroll.y),
                         scroll.y < scrollBottom() - 1
                           ? `${Math.max(0, Math.min((scrollBottom() - scroll.y) * 4, 100))}%`
-                          : "0"),
+                          : "0",
                     }}
                   ></div>
 
