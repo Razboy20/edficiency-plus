@@ -2,6 +2,7 @@ import { createResizeObserver } from "@solid-primitives/resize-observer";
 import { createEffect, createMemo, createSignal, on, onMount } from "solid-js";
 import { isServer } from "solid-js/web";
 import { A, useLocation, useNavigate } from "solid-start";
+import logo from "../assets/img/logo.svg";
 import styles from "./Navbar.module.scss";
 
 export default function Navbar() {
@@ -75,7 +76,10 @@ export default function Navbar() {
   return (
     <div class={styles.navbar_sizer}>
       <div class={styles.navbar}>
-        <div class={styles.title}>Flextime Manager</div>
+        <div class={styles.title}>
+          <img src={logo} class="mr-2 h-8 w-8 rounded-md" />
+          Flex Manager
+        </div>
         <div
           class={styles.links}
           classList={{

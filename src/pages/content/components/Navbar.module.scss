@@ -7,7 +7,7 @@
   @apply flex items-center justify-center text-base font-semibold md:text-lg;
 
   .title {
-    @apply flex-1 justify-self-start;
+    @apply flex-1 justify-self-start inline-flex items-center;
   }
 
   .links {
